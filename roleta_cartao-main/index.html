@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071f58">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <title>Roleta do Cartão PAD Saúde+ | Adesão grátis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="indique.css">
+
+  <!-- Google Analytics 4 - PAD Saúde+ -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XX03T7JQVD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XX03T7JQVD', { anonymize_ip: true });
+  </script>
+</head>
+<body>
+  <div class="lights" aria-hidden="true"></div>
+
+  <main class="container">
+    <header class="top">
+      <div class="brand">
+        <div class="brand-mark"><img src="logo.png" alt="PAD Saúde+" onerror="this.replaceWith(document.createTextNode('❤'))"></div>
+        <div>
+          <strong>PAD Saúde<span>+</span></strong>
+          <small>Mais saúde para você e sua família</small>
+        </div>
+      </div>
+      <div class="badge">💳 Cartão <b>PAD Saúde+</b></div>
+    </header>
+
+    <section class="hero">
+      <p class="hero-kicker">💳 Concorra à adesão grátis</p>
+      <h1>Roleta do <span>Cartão</span></h1>
+      <p class="hero-sub">Gire e descubra se você ganhou a <b>adesão grátis</b> ou <b>desconto na adesão do Cartão PAD Saúde+</b>, o cartão de descontos em consultas e exames para você e toda a sua família.</p>
+    </section>
+
+    <section class="game">
+      <!-- COLUNA DA ROLETA -->
+      <div class="wheel-column">
+        <div class="wheel-stage">
+          <div class="wheel-rim" aria-hidden="true"></div>
+          <canvas id="wheel" aria-label="Roleta com 10 opções de prêmio" role="img"></canvas>
+          <div class="pointer" aria-hidden="true"></div>
+          <button id="hubBtn" class="hub" type="button" aria-label="Girar a roleta">
+            <span>GIRAR</span><small>a roleta</small>
+          </button>
+        </div>
+
+        <button id="spinBtn" class="spin" type="button">🎡 GIRAR A ROLETA</button>
+
+        <div class="rounds-box">
+          <div id="rounds" class="rounds">Cadastre-se para liberar suas 10 rodadas</div>
+          <div id="roundsBar" class="rounds-bar" aria-hidden="true"></div>
+        </div>
+
+        <div class="tools">
+          <button id="soundBtn" class="tool-btn" type="button">🔊 Som ligado</button>
+          <button id="myPrizesBtn" class="tool-btn" type="button">🎁 Meus prêmios</button>
+        </div>
+      </div>
+
+      <!-- PAINEL LATERAL -->
+      <aside class="panel" id="panel" aria-live="polite">
+        <!-- 1. Cadastro -->
+        <div id="formBox">
+          <h2>Participe e concorra!</h2>
+          <p class="panel-sub">Informe seus dados para liberar a roleta.</p>
+          <form id="leadForm" novalidate>
+            <label for="name">Nome completo</label>
+            <input id="name" name="name" required maxlength="80" autocomplete="name" placeholder="Digite seu nome">
+
+            <label for="phone">WhatsApp</label>
+            <input id="phone" name="phone" required type="tel" inputmode="tel" maxlength="16" autocomplete="tel-national" placeholder="(81) 99999-9999">
+
+            <label class="check">
+              <input id="consent" type="checkbox" required>
+              <span>Concordo com o uso dos meus dados para participar da promoção e receber informações do PAD Saúde+, conforme a <a href="https://sites.google.com/view/politicapadcartao/in%C3%ADcio" target="_blank" rel="noopener noreferrer" class="privacy-link">Política de Privacidade</a>.</span>
+            </label>
+
+            <button id="submitBtn" class="primary" type="submit">Liberar a roleta 🎡</button>
+          </form>
+          <div id="loginStatus" class="status">Conectando…</div>
+        </div>
+
+        <!-- 2. Pronto para girar -->
+        <div id="readyBox" class="ready hidden">
+          <div class="result-emoji" aria-hidden="true">🎡</div>
+          <h2 id="readyTitle">Tudo pronto!</h2>
+          <p class="panel-sub">Toque em <b>Girar a roleta</b> para descobrir seu prêmio. Boa sorte!</p>
+        </div>
+
+        <!-- 3. Resultado -->
+        <div id="resultBox" class="result hidden">
+          <div id="resultEmoji" class="result-emoji" aria-hidden="true">🎉</div>
+          <p id="resultKicker" class="result-kicker">Parabéns!</p>
+          <h2 id="resultMain">Você ganhou</h2>
+          <div id="resultPrize" class="prize">30% OFF</div>
+          <p id="resultText" class="panel-sub">Seu resultado aparecerá aqui.</p>
+
+          <div id="couponArea" class="coupon-area">
+            <span>Seu cupom</span>
+            <div class="coupon-row">
+              <div id="coupon" class="coupon">PAD30-XXXXX</div>
+              <button id="copyBtn" class="copy-btn" type="button">Copiar</button>
+            </div>
+          </div>
+
+          <p id="validity" class="validity"></p>
+
+          <div class="result-actions">
+            <button id="whatsappBtn" class="whatsapp" type="button">💳 Quero meu Cartão PAD Saúde+</button>
+            <button id="againBtn" class="again" type="button">Girar de novo</button>
+          </div>
+        </div>
+
+        <div id="spinError" class="status error hidden" role="alert"></div>
+      </aside>
+    </section>
+
+    <section class="how">
+      <h2>Como funciona?</h2>
+      <ol class="steps">
+        <li><b>1</b><strong>Cadastre-se</strong><span>Nome e WhatsApp</span></li>
+        <li><b>2</b><strong>Gire</strong><span>A roleta da sorte</span></li>
+        <li><b>3</b><strong>Descubra</strong><span>Seu resultado</span></li>
+        <li><b>4</b><strong>Aproveite</strong><span>Faça seu Cartão PAD Saúde+</span></li>
+      </ol>
+    </section>
+
+    <footer>
+      Promoção Cartão PAD Saúde+. Descontos e adesão grátis sujeitos às condições da campanha. Não cumulativo com outras promoções.
+    </footer>
+  </main>
+
+  <!-- MODAL MEUS PRÊMIOS -->
+  <div id="myPrizesModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="myPrizesTitle">
+    <div class="modal-card">
+      <button id="closePrizesBtn" class="modal-close" type="button" aria-label="Fechar">×</button>
+      <div class="result-emoji" aria-hidden="true">🎁</div>
+      <h2 id="myPrizesTitle">Meus prêmios</h2>
+      <p>Digite o mesmo WhatsApp usado na participação.</p>
+      <div class="prize-search">
+        <input id="prizesPhone" type="tel" inputmode="tel" maxlength="16" placeholder="(81) 99999-9999" aria-label="WhatsApp">
+        <button id="searchPrizesBtn" class="primary" type="button">Consultar prêmios</button>
+      </div>
+      <div id="prizesStatus" class="status status-dark"></div>
+      <div id="prizesList" class="prizes-list"></div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="app.min.js"></script>
+  <script src="indique.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,110 @@
+/* ===== Indique e Ganhe — Cartão PAD Saúde+ ===== */
+
+/* Faixa de chamada (acima de "Como funciona?") */
+.ind-cta {
+  margin-top: 34px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: linear-gradient(120deg, rgba(32, 198, 90, .22), rgba(25, 188, 232, .14));
+  border: 1px solid rgba(255, 255, 255, .22);
+}
+.ind-cta-icon { font-size: 40px; line-height: 1; flex: none; }
+.ind-cta-text { flex: 1; min-width: 0; }
+.ind-cta-text h2 { font-family: var(--font-display); font-size: 26px; margin: 0; line-height: 1.1; }
+.ind-cta-text p { margin: 4px 0 0; color: var(--text-soft); line-height: 1.45; }
+.ind-cta-btn {
+  flex: none;
+  border: 0;
+  border-radius: 13px;
+  padding: 13px 20px;
+  background: var(--gold);
+  color: #14274b;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 17px;
+  cursor: pointer;
+}
+.ind-cta-btn:hover { background: var(--gold-light); }
+.ind-tool { border-color: rgba(255, 189, 25, .6); }
+
+/* Modal */
+.ind-card { text-align: left; }
+.ind-card > .result-emoji, .ind-card #indFormBox > .result-emoji, .ind-card #indOkBox > .result-emoji { text-align: center; font-size: 44px; }
+.ind-card h2 { text-align: center; }
+.ind-card p { text-align: center; line-height: 1.45; }
+
+.ind-form label { display: block; font-weight: 700; font-size: 14px; margin: 14px 0 6px; color: #17213b; }
+.ind-form input:not([type=checkbox]), .ind-form select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d6dbe7;
+  border-radius: 12px;
+  font-size: 16px; /* evita zoom no iPhone */
+  color: #14274b;
+  background: #fff;
+  min-width: 0;
+}
+.ind-form input.invalid { border-color: #e11d48; box-shadow: 0 0 0 3px rgba(225, 29, 72, .12); }
+.ind-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ind-row > div label { margin-top: 14px; }
+.ind-row select { align-self: end; }
+.ind-check {
+  display: flex !important;
+  gap: 10px;
+  align-items: flex-start;
+  font-weight: 400 !important;
+  color: #475467 !important;
+  line-height: 1.4;
+  font-size: 14px !important;
+  cursor: pointer;
+  margin-top: 16px !important;
+}
+.ind-check input { width: 18px; height: 18px; margin-top: 2px; flex: none; accent-color: #1a72d1; }
+.ind-check a { color: #1a72d1; font-weight: 700; }
+.ind-form .status.error { color: #b91c1c; font-weight: 700; }
+
+.ind-rules { margin-top: 16px; font-size: 14px; color: #475467; }
+.ind-rules summary { cursor: pointer; font-weight: 700; color: #1a72d1; }
+.ind-rules ul { margin: 8px 0 0; padding-left: 18px; line-height: 1.5; }
+
+.ind-coupon {
+  margin: 18px 0 14px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #eef2ff;
+  border: 1px dashed #93a4f5;
+  text-align: center;
+}
+.ind-coupon span { display: block; font-size: 13px; font-weight: 700; color: #475467; }
+.ind-coupon-row { display: flex; justify-content: center; align-items: stretch; gap: 10px; margin-top: 8px; }
+.ind-coupon strong {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: clamp(22px, 6vw, 28px);
+  letter-spacing: 2px;
+  color: #071f58;
+}
+.ind-card .whatsapp { margin-top: 4px; }
+.ind-link {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  color: #1a72d1;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+.ind-small { font-size: 13px; color: #667085 !important; margin-top: 10px !important; }
+
+@media (max-width: 560px) {
+  .ind-cta { flex-direction: column; text-align: center; }
+  .ind-cta-btn { width: 100%; }
+}
+@media (max-width: 400px) {
+  .ind-row { grid-template-columns: 1fr; gap: 0; }
+}
