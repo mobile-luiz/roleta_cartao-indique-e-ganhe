@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#071f58">
+  <title>Painel da Roleta | PAD Saúde+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <section id="loginView" class="login hidden">
+    <form id="loginForm" class="login-card" novalidate>
+      <div class="login-mark" aria-hidden="true">🎡</div>
+      <h1>Painel da Roleta</h1>
+      <p>Acesso restrito à equipe PAD Saúde+.</p>
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="username" required>
+      <label for="password">Senha</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <button id="loginBtn" class="btn btn-primary" type="submit">Entrar</button>
+      <div id="loginMsg" class="msg" role="alert"></div>
+    </form>
+  </section>
+
+  <!-- PAINEL -->
+  <div id="appView" class="hidden">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand"><span aria-hidden="true">🎡</span> Roleta <b>PAD Saúde+</b> <small>Painel</small></div>
+        <div class="user">
+          <span id="userEmail"></span>
+          <button id="logoutBtn" class="btn btn-ghost-light" type="button">Sair</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- Seleção do dia -->
+      <div class="daybar">
+        <div class="daynav">
+          <button id="prevDay" class="btn btn-icon" type="button" aria-label="Dia anterior">‹</button>
+          <input id="dayInput" type="date" aria-label="Dia">
+          <button id="nextDay" class="btn btn-icon" type="button" aria-label="Próximo dia">›</button>
+          <button id="todayBtn" class="btn btn-light" type="button">Hoje</button>
+        </div>
+        <div class="daytitle">
+          <h1 id="dayTitle">—</h1>
+          <span id="dayBadge" class="pill"></span>
+          <span id="liveBadge" class="pill live" title="Os dados atualizam sozinhos">● ao vivo</span>
+        </div>
+              </div>
+
+      <div id="serverAlert" class="alert hidden" role="alert"></div>
+
+      <!-- Números do dia -->
+      <section class="kpis" aria-label="Resumo do dia">
+        <div class="kpi"><span>Participantes</span><strong id="kpiPart">—</strong></div>
+        <div class="kpi"><span>Giros</span><strong id="kpiSpins">—</strong></div>
+        <div class="kpi"><span>Prêmios entregues</span><strong id="kpiPrizes">—</strong></div>
+        <div class="kpi"><span>Cotas restantes</span><strong id="kpiLeft">—</strong></div>
+      </section>
+
+      <nav class="tabs" role="tablist" aria-label="Seções do painel">
+        <button class="tab active" type="button" role="tab" data-tab="tabResumo" aria-selected="true">🎯 Cotas e ganhadores</button>
+        <button class="tab" type="button" role="tab" data-tab="tabParticipantes" aria-selected="false">👥 Participantes <span id="partTabCount" class="tab-count"></span></button>
+        <button class="tab" type="button" role="tab" data-tab="tabIndique" aria-selected="false">🤝 Indique e Ganhe <span id="indTabCount" class="tab-count"></span></button>
+      </nav>
+
+      <div id="tabResumo" role="tabpanel">
+      <div class="grid">
+        <!-- COTAS -->
+        <section class="card">
+          <div class="card-head">
+            <h2>Cotas do dia</h2>
+            <label class="switch"><input id="quotaActive" type="checkbox" checked> <span>Ativa</span></label>
+          </div>
+          <p class="hint">Quantas pessoas ganham cada prêmio neste dia. As primeiras pessoas a girar levam as cotas até acabarem.</p>
+
+          <div class="quota-table" id="quotaTable" role="table" aria-label="Cotas por prêmio">
+            <div class="qrow qhead" role="row">
+              <span role="columnheader">Prêmio</span>
+              <span role="columnheader">Pessoas</span>
+              <span role="columnheader">Ganh<span class="off-sfx">aram</span></span>
+              <span role="columnheader">Restam</span>
+            </div>
+            <!-- linhas geradas pelo admin.js -->
+          </div>
+
+          <label class="field" for="quotaOrder">Ordem de entrega</label>
+          <select id="quotaOrder">
+            <option value="aleatorio">Sorteado entre as cotas que sobraram (recomendado)</option>
+            <option value="maior_primeiro">Maiores descontos primeiro</option>
+            <option value="menor_primeiro">Menores descontos primeiro</option>
+          </select>
+
+          <label class="field" for="repeatUntil">Repetir a mesma cota até <small>(opcional)</small></label>
+          <input id="repeatUntil" type="date">
+
+          <div class="actions">
+            <button id="saveQuota" class="btn btn-primary" type="button">Salvar cotas</button>
+            <button id="clearQuota" class="btn btn-light" type="button">Zerar campos</button>
+          </div>
+          <div id="quotaMsg" class="msg"></div>
+
+          <details class="rules">
+            <summary>Como a cota funciona</summary>
+            <ul>
+              <li>Cada WhatsApp ganha <b>no máximo 1 prêmio de cota por dia</b>, no primeiro giro em que houver cota disponível.</li>
+              <li>Quem já ganhou um percentual antes <b>não recebe o mesmo percentual de novo</b>; o sistema entrega outra cota que sobrou.</li>
+              <li>Nos dias com cota, <b>só ganha quem pegar cota</b>. Depois que acabam, a roleta mostra "Tente novamente / Não foi desta vez".</li>
+              <li>O que já foi entregue nunca é apagado ao salvar de novo.</li>
+            </ul>
+          </details>
+        </section>
+
+        <div class="side">
+          <!-- PROGRAMAÇÃO -->
+          <section class="card">
+            <div class="card-head"><h2>Próximos dias programados</h2></div>
+            <div id="scheduleList" class="schedule"><p class="empty">Carregando…</p></div>
+          </section>
+
+          <!-- DIAS SEM COTA -->
+          <section class="card">
+            <div class="card-head"><h2>Dias sem cota</h2></div>
+            <p class="hint">Nesta versão (sem servidor), <b>num dia sem cota ninguém ganha prêmio</b>. Para alguém ganhar, programe a cota do dia acima.</p>
+            <div id="configMsg" class="msg"></div>
+          </section>
+        </div>
+      </div>
+
+      <!-- GANHADORES -->
+      <section class="card">
+        <div class="card-head wrap-head">
+          <h2>Ganhadores do dia <span id="winnersCount" class="count"></span></h2>
+          <div class="tools">
+            <input id="winnerSearch" type="search" placeholder="Buscar nome, WhatsApp ou cupom" aria-label="Buscar ganhador">
+            <select id="winnerFilter" aria-label="Filtrar">
+              <option value="">Todos</option>
+              <option value="disponivel">Disponíveis</option>
+              <option value="utilizado">Utilizados</option>
+              <option value="vencido">Vencidos</option>
+              <option value="cancelado">Cancelados</option>
+              <option value="fora">Fora da cota</option>
+            </select>
+            <button id="exportCsv" class="btn btn-light" type="button">Baixar planilha (CSV)</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="winners">
+            <thead>
+              <tr>
+                <th>Hora</th><th>Nome</th><th>WhatsApp</th><th>Prêmio</th><th>Cupom</th>
+                <th>Origem</th><th>Validade</th><th>Situação</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="winnersBody"></tbody>
+          </table>
+        </div>
+        <div id="winnersPager" class="pager"></div>
+      </section>
+      </div>
+
+      <!-- PARTICIPANTES -->
+      <div id="tabParticipantes" role="tabpanel" class="hidden">
+        <section class="card">
+          <div class="card-head wrap-head">
+            <h2>Participantes do dia <span id="partCount" class="count"></span></h2>
+            <div class="tools">
+              <input id="partSearch" type="search" placeholder="Buscar nome ou WhatsApp" aria-label="Buscar participante">
+              <select id="partFilter" aria-label="Filtrar participantes">
+                <option value="">Todos</option>
+                <option value="ganhou">Ganharam prêmio</option>
+                <option value="jogando">Ainda têm rodadas</option>
+                <option value="terminou">Usaram as 10 rodadas</option>
+                <option value="nao-girou">Não giraram</option>
+              </select>
+              <button id="exportPartCsv" class="btn btn-light" type="button">Baixar planilha (CSV)</button>
+            </div>
+          </div>
+          <div id="girosAviso" class="alert hidden">⚠️ <b>Os giros não aparecem porque as regras do banco ainda não liberam o <code>roleta_giros</code>.</b> Atualize as regras do Realtime Database com o arquivo <b>regras-realtime-database.json</b>. A lista de participantes e os prêmios continuam funcionando.</div>
+          <p class="hint">Cada linha é uma participação (cadastro). A mesma pessoa pode aparecer mais de uma vez se participou de novo.</p>
+          <div class="table-wrap">
+            <table class="winners parts">
+              <thead>
+                <tr>
+                  <th>Hora</th><th>Nome</th><th>WhatsApp</th><th>Participação</th>
+                  <th>Giros</th><th>Prêmios</th><th>Último resultado</th>
+                </tr>
+              </thead>
+              <tbody id="partsBody"></tbody>
+            </table>
+          </div>
+          <div id="partsPager" class="pager"></div>
+        </section>
+      </div>
+      <!-- INDIQUE E GANHE -->
+      <div id="tabIndique" role="tabpanel" class="hidden">
+        <section class="kpis ind-kpis" aria-label="Resumo do Indique e Ganhe">
+          <div class="kpi"><span>Cadastrados (cupons)</span><strong id="indKpiCad">—</strong></div>
+          <div class="kpi"><span>Cartões feitos</span><strong id="indKpiCartao">—</strong></div>
+          <div class="kpi kpi-alert"><span>PIX a pagar</span><strong id="indKpiPagar">—</strong><small id="indKpiPagarValor"></small></div>
+          <div class="kpi"><span>PIX pagos</span><strong id="indKpiPagos">—</strong><small id="indKpiPagosValor"></small></div>
+        </section>
+
+        <section class="card">
+          <div class="card-head wrap-head">
+            <h2>Indicações <span id="indCount" class="count"></span></h2>
+            <div class="tools">
+              <input id="indSearch" type="search" placeholder="Buscar nome, CPF, WhatsApp ou cupom" aria-label="Buscar indicação">
+              <select id="indFilter" aria-label="Filtrar indicações">
+                <option value="">Todas</option>
+                <option value="cupom_gerado">Cupom gerado</option>
+                <option value="cartao_feito">Cartão feito</option>
+                <option value="parcela_paga">PIX a pagar</option>
+                <option value="pix_pago">PIX pago</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+              <button id="indExport" class="btn btn-light" type="button">Baixar planilha (CSV)</button>
+            </div>
+          </div>
+          <p class="hint">Quem se cadastrou para pegar o cupom e indicar. Quando o indicado fizer o cartão, busque o cupom aqui e clique em <b>Atualizar</b>: registre o cartão, depois a 1ª parcela paga e, por fim, o PIX enviado.</p>
+          <div id="indAviso" class="alert hidden"></div>
+          <div class="table-wrap">
+            <table class="winners ind-table">
+              <thead>
+                <tr>
+                  <th>Cadastro</th><th>Quem indica</th><th>CPF</th><th>Chave PIX</th>
+                  <th>Cupom</th><th>Indicado</th><th>Situação</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="indBody"><tr><td colspan="8" class="empty">Carregando…</td></tr></tbody>
+            </table>
+          </div>
+          <div id="indPager" class="pager"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL ATUALIZAR INDICAÇÃO -->
+  <div id="indDialog" class="adm-modal hidden" role="dialog" aria-modal="true" aria-labelledby="indDlgTitle">
+    <form id="indDlgForm" class="adm-modal-card" novalidate>
+      <button id="indDlgClose" class="adm-modal-close" type="button" aria-label="Fechar">×</button>
+      <h2 id="indDlgTitle">Atualizar indicação</h2>
+      <div id="indDlgInfo" class="ind-info"></div>
+
+      <label class="field" for="indDlgStatus">Situação</label>
+      <select id="indDlgStatus">
+        <option value="cupom_gerado">1. Cupom gerado (aguardando o indicado)</option>
+        <option value="cartao_feito">2. Indicado fez o cartão</option>
+        <option value="parcela_paga">3. 1ª parcela paga — PIX a pagar</option>
+        <option value="pix_pago">4. PIX enviado para quem indicou</option>
+        <option value="cancelado">Cancelado (cupom deixa de valer)</option>
+      </select>
+
+      <div class="ind-grid">
+        <div>
+          <label class="field" for="indDlgNome">Nome do indicado</label>
+          <input id="indDlgNome" maxlength="80" placeholder="Quem fez o cartão">
+        </div>
+        <div>
+          <label class="field" for="indDlgWhats">WhatsApp do indicado</label>
+          <input id="indDlgWhats" type="tel" inputmode="tel" maxlength="16" placeholder="(81) 99999-9999">
+        </div>
+      </div>
+      <label class="field" for="indDlgValor">Valor da 1ª parcela (PIX a pagar) <small>R$</small></label>
+      <input id="indDlgValor" inputmode="decimal" placeholder="0,00">
+
+      <label class="field" for="indDlgObs">Observação <small>(opcional)</small></label>
+      <input id="indDlgObs" maxlength="200" placeholder="Ex.: comprovante enviado no WhatsApp">
+
+      <div id="indDlgMsg" class="msg"></div>
+      <div class="actions">
+        <button id="indDlgSave" class="btn btn-primary" type="submit">Salvar</button>
+        <button id="indDlgCancel" class="btn btn-light" type="button">Fechar</button>
+        <button id="indDlgDelete" class="btn btn-small btn-cancel ind-del" type="button">Excluir cadastro</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="admin.js"></script>
+  <script src="admin-indique.js"></script>
+</body>
+</html>

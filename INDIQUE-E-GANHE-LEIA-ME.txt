@@ -1,0 +1,28 @@
+INDIQUE E GANHE — Cartão PAD Saúde+
+====================================
+
+1) REGRAS DO BANCO (obrigatório, faça primeiro)
+   Firebase Console > projeto roleta-d372c > Realtime Database > Regras
+   Apague tudo, cole o conteúdo de regras-realtime-database.json e clique em Publicar.
+   Sem isso, o cadastro do cupom e a aba do painel dão "sem permissão".
+
+2) ROLETA (repositório roleta_cartao)
+   Arquivos novos: indique.js, indique.css
+   Arquivo alterado: index.html (2 linhas: o CSS e o <script src="indique.js">)
+   O app.min.js NÃO foi mexido.
+
+3) PAINEL (repositório painelADM_roleta)
+   Arquivo novo: admin-indique.js
+   Alterados: index.html (aba + janela "Atualizar"), admin.css (estilos no final),
+              regras-realtime-database.json
+   O admin.js NÃO foi mexido.
+
+ONDE FICAM OS DADOS
+   indicacoes/{cupom}      cadastro completo (só o painel lê): nome, WhatsApp, CPF,
+                           nascimento, chave PIX, indicado, valor da parcela, situação
+   indique_cpfs/{hash}     1 cupom por CPF (o CPF fica protegido em hash)
+   indique_cupons/{cupom}  só o primeiro nome de quem indicou (para a tela do indicado)
+   indique_stats/{cupom}   compartilhamentos, visitas do link e cliques
+
+SITUAÇÕES NO PAINEL
+   Cupom gerado > Cartão feito > PIX a pagar (1ª parcela paga) > PIX pago  (ou Cancelado)
