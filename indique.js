@@ -183,6 +183,8 @@
       </div>
       <p class="ind-small">Informe este cupom ao fazer o seu Cartão PAD Saúde+, o cartão de descontos em consultas e exames para você e sua família.</p>
       <button id="indGuestBtn" class="whatsapp" type="button">💳 Quero meu Cartão PAD Saúde+</button>
+      <div class="ind-or"><span>ou</span></div>
+      <button id="indGuestSwitch" class="ind-switch" type="button">🤝 Quero gerar meu próprio cupom e indicar</button>
       <button class="ind-link" type="button" data-ind-close>Aproveitar e girar a roleta 🎡</button>
     </div>
   </div>`;
@@ -435,6 +437,13 @@
     somaStat(cupom, "cliques");
     track("indique_guest_whatsapp");
     abrirWhatsApp(PAD_WHATSAPP, texto);
+  });
+
+  // Quem recebeu um cupom mas prefere gerar o próprio para indicar outras pessoas
+  el("indGuestSwitch").addEventListener("click", () => {
+    guest.classList.add("hidden");
+    abrirIndique();
+    track("indique_guest_switch");
   });
 
   abrirIndicado();

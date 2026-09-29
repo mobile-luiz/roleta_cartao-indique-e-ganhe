@@ -101,6 +101,22 @@
 }
 .ind-small { font-size: 13px; color: #667085 !important; margin-top: 10px !important; }
 
+.ind-or { display: flex; align-items: center; gap: 10px; margin: 14px 0 10px; color: #98a2b3; font-size: 13px; }
+.ind-or::before, .ind-or::after { content: ""; flex: 1; height: 1px; background: #e4e7ec; }
+.ind-switch {
+  width: 100%;
+  padding: 13px;
+  border: 2px solid #1a72d1;
+  border-radius: 13px;
+  background: #fff;
+  color: #1a72d1;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+}
+.ind-switch:hover { background: #eef5fd; }
+
 @media (max-width: 560px) {
   .ind-cta { flex-direction: column; text-align: center; }
   .ind-cta-btn { width: 100%; }
